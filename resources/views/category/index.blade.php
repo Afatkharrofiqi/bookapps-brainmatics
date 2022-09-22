@@ -7,6 +7,10 @@
                 <div class="card">
                     <div class="card-header">List of Category</div>
                     <div class="card-body">
+                        @include('components.alert')
+                        <div class="pb-2">
+                            <a href="{{ route('category.create') }}" class="btn btn-dark">Create new Category</a>
+                        </div>
                         <table class="table">
                             <thead class="table-dark">
                                 <th>No</th>

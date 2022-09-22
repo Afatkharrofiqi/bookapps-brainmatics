@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exceptions\CategoryStoreException;
+use App\Http\Requests\CategoryStoreRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -15,7 +17,7 @@ class CategoryController extends Controller
     public function index()
     {
         $data = [
-            'categories' => Category::paginate(10)
+            'categories' => Category::latest()->paginate(10)
         ];
         return view('category.index', $data);
     }
@@ -27,7 +29,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('category.create');
     }
 
     /**
@@ -36,9 +38,20 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryStoreRequest $request)
     {
-        //
+        try {
+            $category = new Category();
+            $category->name = $request->name;
+            $category->save();
+            return redirect()
+                ->route('category.index')
+                ->with('message-success', 'Category created successfully');
+        } catch (\App\Exceptions\CategoryStoreException $e) {
+            return redirect()
+                ->route('category.index')
+                ->with('message-fail', 'Category create fail. '.$e->getMessage() );
+        }
     }
 
     /**
