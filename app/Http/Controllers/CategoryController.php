@@ -99,7 +99,7 @@ class CategoryController extends Controller
         } catch (\Exception $e) {
             return redirect()
                 ->route('category.index')
-                ->with('message-fail', 'Category update failure. '.$e->getMessage() );
+                ->with('message-fail', 'Category update failure. '.$e->getMessage());
         }
     }
 
