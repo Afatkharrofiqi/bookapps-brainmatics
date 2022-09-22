@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BookStoreRequest;
 use App\Models\Book;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
@@ -15,7 +17,8 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::with(['createdBy:id,name', 'updatedBy:id,name'])
+        $books = Book::with(['createdBy:id,name', 'updatedBy:id,name', 'categories'])
+                        ->latest()
                         ->paginate(10);
         return view('book.index', compact('books'));
     }
@@ -37,8 +40,24 @@ class BookController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BookStoreRequest $request)
     {
+        DB::beginTransaction();
+        try {
+            $book = new Book();
+            $book->title = $request->title;
+            $book->cover = $request->file('cover')->store('book-cover', 'public');
+            $book->year = $request->year;
+            $book->created_by = auth()->user()->id;
+            $book->save();
+
+            $book->categories()->attach($request->categories);
+            DB::commit();
+            return redirect()->route('book.index')->with('message-success', 'Book created successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('book.index')->with('message-fail', 'Book create failure .'.$e->getMessage());
+        }
     }
 
     /**

@@ -32,12 +32,22 @@
                                         <td>
                                             @if (str_contains($book->cover, 'http'))
                                                 <img src="{{ $book->cover }}" alt="{{ $book->title }}" width="100" />
+                                                @else
+                                                <img src="{{ asset('storage/'.$book->cover) }}" alt="{{ $book->title }}" width="100" />
                                             @endif
                                         </td>
                                         <td>{{$book->year}}</td>
-                                        <td>TODO: category</td>
+                                        <td>
+                                            <ul>
+                                                @forelse ($book->categories as $category)
+                                                    <li>{{ $category->name }}</li>
+                                                @empty
+                                                    -
+                                                @endforelse
+                                            </ul>
+                                        </td>
                                         <td>{{$book->createdBy->name}}</td>
-                                        <td>{{$book->updatedBy?->name}}</td>
+                                        <td>{{$book->updatedBy->name}}</td>
                                         <td>{{$book->created_at}}</td>
                                         <td>{{$book->updated_at}}</td>
                                         <td class="justify-content-between">

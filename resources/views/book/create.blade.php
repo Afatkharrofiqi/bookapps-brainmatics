@@ -15,24 +15,24 @@
                     <div class="card-header">Form create book</div>
                     <div class="card-body">
                         @include('components.error-form')
-                        <form method="POST" action="{{ route('book.store') }}">
+                        <form method="POST" action="{{ route('book.store') }}" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
                                 <label for="title" class="col-sm-2 col-form-label">Title</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="title" name="title" value="" placeholder="book title">
+                                    <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}" placeholder="book title">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="cover" class="col-sm-2 col-form-label">Cover</label>
                                 <div class="col-sm-10">
-                                    <input type="file" class="form-control" id="cover" name="cover">
+                                    <input type="file" class="form-control" id="cover" name="cover" value="{{ old('cover') }}">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="year" class="col-sm-2 col-form-label">Year</label>
                                 <div class="col-sm-10">
-                                    <input type="date" class="form-control" id="year" name="year" value="" placeholder="year">
+                                    <input type="date" class="form-control" id="year" name="year" value="{{ old('year') }}" placeholder="year">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -40,7 +40,11 @@
                                 <div class="col-sm-10">
                                     <select name="categories[]" multiple id="categories" class="form-select">
                                         @foreach ($categories as $key => $category)
-                                            <option value="{{ $key }}">{{ $category }}</option>
+                                            @forelse (old('categories') ?? [] as $selectedId)
+                                                <option value="{{ $key }}" {{ $selectedId == $key ? 'selected' : '' }}>{{ $category }}</option>
+                                                @empty
+                                                <option value="{{ $key }}">{{ $category }}</option>
+                                            @endforelse
                                         @endforeach
                                     </select>
                                 </div>

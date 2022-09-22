@@ -14,6 +14,13 @@ class Book extends Model
     }
 
     public function updatedBy(){
-        return $this->belongsTo(User::class, 'updated_by', 'id');
+        return $this->belongsTo(User::class, 'updated_by', 'id')->withDefault([
+            'name' => '-'
+        ]);
+    }
+
+    public function categories() {
+        return $this->belongsToMany(
+            Category::class, 'book_category', 'book_id', 'category_id');
     }
 }
