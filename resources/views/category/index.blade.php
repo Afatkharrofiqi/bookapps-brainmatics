@@ -27,8 +27,12 @@
                                         <td>{{$category->created_at}}</td>
                                         <td>{{$category->updated_at}}</td>
                                         <td class="justify-content-between">
-                                            <a href="#" class="btn btn-primary">Edit</a>
-                                            <a href="#" class="btn btn-danger">Delete</a>
+                                            <a href="{{ route('category.edit', ['category' => $category->id]) }}" class="btn btn-primary">Edit</a>
+                                            @component('components.delete-button')
+                                                @slot('action')
+                                                {{ route('category.delete', ['category' => $category->id ]) }}
+                                                @endslot
+                                            @endcomponent
                                         </td>
                                     </tr>
                                 @empty

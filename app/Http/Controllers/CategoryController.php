@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Exceptions\CategoryStoreException;
 use App\Http\Requests\CategoryStoreRequest;
+use App\Http\Requests\CategoryUpdateRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CategoryController extends Controller
 {
@@ -73,7 +75,10 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        // $data = [
+        //     'category' => $category
+        // ];
+        return view('category.edit', compact('category'));
     }
 
     /**
@@ -83,9 +88,19 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(CategoryUpdateRequest $request, Category $category)
     {
-        //
+        try {
+            $category->name = $request->name;
+            $category->save();
+            return redirect()
+                ->route('category.index')
+                ->with('message-success', 'Category updated successfully');
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('category.index')
+                ->with('message-fail', 'Category update failure. '.$e->getMessage() );
+        }
     }
 
     /**
@@ -96,6 +111,15 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        try {
+            $category->delete();
+            return redirect()
+                    ->route('category.index')
+                    ->with('message-success', 'Category deleted successfully');
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('category.index')
+                ->with('message-fail', 'Category update failure. '.$e->getMessage());
+        }
     }
 }
