@@ -14,7 +14,8 @@ class BookController extends Controller
      */
     public function index()
     {
-        $books = Book::paginate(10);
+        $books = Book::with(['createdBy:id,name', 'updatedBy:id,name'])
+                        ->paginate(10);
         return view('book.index', compact('books'));
     }
 
