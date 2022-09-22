@@ -122,4 +122,8 @@ class CategoryController extends Controller
                 ->with('message-fail', 'Category update failure. '.$e->getMessage());
         }
     }
+
+    public function getSelect2(){
+        return Category::all();
+    }
 }

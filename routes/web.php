@@ -29,6 +29,7 @@ Route::middleware(['auth','record.access'])->group(function(){
         Route::get('/{category}/edit', 'edit')->name('category.edit');
         Route::put('/{category}', 'update')->name('category.update');
         Route::delete('/{category}', 'destroy')->name('category.delete');
+        Route::get('/select2', 'getSelect2')->name('category.select2');
     });
 
     Route::resource('book', BookController::class);

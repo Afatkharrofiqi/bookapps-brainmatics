@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
@@ -26,7 +27,8 @@ class BookController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all()->pluck('name', 'id');
+        return view('book.create', compact('categories'));
     }
 
     /**
@@ -37,7 +39,6 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        //
     }
 
     /**
