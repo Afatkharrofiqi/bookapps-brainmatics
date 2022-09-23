@@ -51,10 +51,10 @@
                             @endif
                         @else
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('category.index') }}">Category</a>
+                                <a class="nav-link {{ request()->is('category*') ? 'active' : '' }}" href="{{ route('category.index') }}">Category</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('book.index') }}">Book</a>
+                                <a class="nav-link {{ request()->is('book*') ? 'active' : ''}}" href="{{ route('book.index') }}">Book</a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
