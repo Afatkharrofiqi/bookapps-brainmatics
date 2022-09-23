@@ -8,9 +8,11 @@
                     <div class="card-header">Management Book</div>
                     <div class="card-body">
                         @include('components.alert')
-                        <div class="pb-2">
-                            <a href="{{ route('book.create') }}" class="btn btn-dark">Create new Book</a>
-                        </div>
+                        @can('create-book')
+                            <div class="pb-2">
+                                <a href="{{ route('book.create') }}" class="btn btn-dark">Create new Book</a>
+                            </div>
+                        @endcan
                         <table class="table">
                             <thead class="table-dark text-center">
                                 <th>No</th>
@@ -22,7 +24,9 @@
                                 <th>Updated By</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
-                                <th>Action</th>
+                                @can(['update-book', 'delete-book'])
+                                    <th>Action</th>
+                                @endcan
                             </thead>
                             <tbody>
                                 @forelse ($books as $key => $book)
@@ -50,14 +54,16 @@
                                         <td>{{$book->updatedBy->name}}</td>
                                         <td>{{$book->created_at}}</td>
                                         <td>{{$book->updated_at}}</td>
-                                        <td class="justify-content-between">
-                                            <a href="{{ route('book.edit', ['book' => $book->id]) }}" class="btn btn-primary">Edit</a>
-                                            @component('components.delete-button')
-                                                @slot('action')
-                                                {{ route('book.destroy', ['book' => $book->id ]) }}
-                                                @endslot
-                                            @endcomponent
-                                        </td>
+                                        @can(['update-book', 'delete-book'])
+                                            <td class="justify-content-between">
+                                                <a href="{{ route('book.edit', ['book' => $book->id]) }}" class="btn btn-primary">Edit</a>
+                                                @component('components.delete-button')
+                                                    @slot('action')
+                                                    {{ route('book.destroy', ['book' => $book->id ]) }}
+                                                    @endslot
+                                                @endcomponent
+                                            </td>
+                                        @endcan
                                     </tr>
                                 @empty
                                     <tr>

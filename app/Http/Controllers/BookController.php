@@ -8,6 +8,7 @@ use App\Models\Book;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
@@ -19,6 +20,8 @@ class BookController extends Controller
      */
     public function index()
     {
+        abort_if(!Gate::allows('list-book'), 403);
+
         $books = Book::with(['createdBy:id,name', 'updatedBy:id,name', 'categories'])
                         ->latest()
                         ->paginate(10);
@@ -32,6 +35,8 @@ class BookController extends Controller
      */
     public function create()
     {
+        abort_if(!Gate::allows('create-book'), 403);
+
         $categories = Category::all()->pluck('name', 'id');
         return view('book.create', compact('categories'));
     }
@@ -81,6 +86,8 @@ class BookController extends Controller
      */
     public function edit(Book $book)
     {
+        abort_if(!Gate::allows('edit-book'), 403);
+
         $categories = Category::pluck('name', 'id');
         return view('book.edit', compact('book', 'categories'));
     }
@@ -125,6 +132,8 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
+        abort_if(!Gate::allows('delete-book'), 403);
+
         DB::beginTransaction();
         try {
             $book->categories()->detach();
