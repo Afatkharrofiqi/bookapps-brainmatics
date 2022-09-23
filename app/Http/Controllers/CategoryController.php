@@ -6,12 +6,15 @@ use App\Exceptions\CategoryStoreException;
 use App\Http\Requests\CategoryStoreRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use App\Models\Category;
+use App\Services\Interfaces\CategoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 class CategoryController extends Controller
 {
+
+    public function __construct(private CategoryInterface $categoryInterface){}
     /**
      * Display a listing of the resource.
      *
@@ -46,9 +49,7 @@ class CategoryController extends Controller
     public function store(CategoryStoreRequest $request)
     {
         try {
-            $category = new Category();
-            $category->name = $request->name;
-            $category->save();
+            $this->categoryInterface->store($request->all());
             return redirect()
                 ->route('category.index')
                 ->with('message-success', 'Category created successfully');

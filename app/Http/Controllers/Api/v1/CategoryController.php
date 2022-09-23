@@ -6,10 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use App\Services\Interfaces\CategoryInterface;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
+    public function __construct(private CategoryInterface $categoryService)
+    {
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -38,10 +43,7 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $category = new Category();
-        $category->name = $request->name;
-        $category->save();
-
+        $category = $this->categoryService->store($request->all());
         return new CategoryResource($category);
     }
 

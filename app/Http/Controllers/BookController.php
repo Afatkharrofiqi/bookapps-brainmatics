@@ -6,6 +6,7 @@ use App\Http\Requests\BookStoreRequest;
 use App\Http\Requests\BookUpdateRequest;
 use App\Models\Book;
 use App\Models\Category;
+use App\Services\Interfaces\CategoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
+    public function __construct(private CategoryInterface $categoryInterface){}
+
     /**
      * Display a listing of the resource.
      *
