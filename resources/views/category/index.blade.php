@@ -8,16 +8,20 @@
                     <div class="card-header">List of Category</div>
                     <div class="card-body">
                         @include('components.alert')
-                        <div class="pb-2">
-                            <a href="{{ route('category.create') }}" class="btn btn-dark">Create new Category</a>
-                        </div>
+                        @can('create-category')
+                            <div class="pb-2">
+                                <a href="{{ route('category.create') }}" class="btn btn-dark">Create new Category</a>
+                            </div>
+                        @endcan
                         <table class="table">
                             <thead class="table-dark">
                                 <th>No</th>
                                 <th>Name</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
-                                <th>Action</th>
+                                @can(['edit-category', 'delete-category'])
+                                    <th>Action</th>
+                                @endcan
                             </thead>
                             <tbody>
                                 @forelse ($categories as $key => $category)
@@ -26,14 +30,16 @@
                                         <td>{{$category->name}}</td>
                                         <td>{{$category->created_at}}</td>
                                         <td>{{$category->updated_at}}</td>
-                                        <td class="justify-content-between">
-                                            <a href="{{ route('category.edit', ['category' => $category->id]) }}" class="btn btn-primary">Edit</a>
-                                            @component('components.delete-button')
-                                                @slot('action')
-                                                {{ route('category.delete', ['category' => $category->id ]) }}
-                                                @endslot
-                                            @endcomponent
-                                        </td>
+                                        @can(['edit-category', 'delete-category'])
+                                            <td class="justify-content-between">
+                                                <a href="{{ route('category.edit', ['category' => $category->id]) }}" class="btn btn-primary">Edit</a>
+                                                @component('components.delete-button')
+                                                    @slot('action')
+                                                    {{ route('category.delete', ['category' => $category->id ]) }}
+                                                    @endslot
+                                                @endcomponent
+                                            </td>
+                                        @endcan
                                     </tr>
                                 @empty
                                     <tr>

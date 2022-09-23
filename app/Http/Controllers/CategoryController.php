@@ -8,6 +8,7 @@ use App\Http\Requests\CategoryUpdateRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Gate;
 
 class CategoryController extends Controller
 {
@@ -31,6 +32,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
+        abort_if(!Gate::allows('create-category'), 403, 'Anda tidak memiliki hak akses!');
+
         return view('category.create');
     }
 
@@ -75,6 +78,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
+        abort_if(!Gate::allows('edit-category'), 403, 'Anda tidak memiliki hak akses!');
         // $data = [
         //     'category' => $category
         // ];
@@ -111,6 +115,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        abort_if(!Gate::allows('delete-category'), 403, 'Anda tidak memiliki hak akses!');
+
         try {
             $category->delete();
             return redirect()
