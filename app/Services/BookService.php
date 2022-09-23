@@ -7,7 +7,8 @@ use App\Models\Book;
 use App\Services\Interfaces\BookInterface;
 use Illuminate\Support\Facades\DB;
 
-class BookService implements BookInterface {
+class BookService implements BookInterface
+{
 
     public function store(array $data)
     {
@@ -25,17 +26,15 @@ class BookService implements BookInterface {
             return redirect()->route('book.index')->with('message-success', 'Book created successfully');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('book.index')->with('message-fail', 'Book create failure .'.$e->getMessage());
+            return redirect()->route('book.index')->with('message-fail', 'Book create failure .' . $e->getMessage());
         }
     }
 
     public function update($id)
     {
-
     }
 
     public function delete($id)
     {
-
     }
 }
