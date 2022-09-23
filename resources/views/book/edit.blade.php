@@ -28,7 +28,7 @@
                                 <div class="col-sm-10">
                                     <input type="file" class="form-control" id="cover" name="cover" value="{{ old('cover') }}">
                                     <div class="mt-2">
-                                        @if (str_contains($book->cover, 'html'))
+                                        @if (str_contains($book->cover, 'http'))
                                             <img src="{{ $book->cover }}" width="100" />
                                             @else
                                             <img src="{{ asset('storage/'. $book->cover) }}" width="100" />
@@ -47,15 +47,7 @@
                                 <div class="col-sm-10">
                                     <select name="categories[]" multiple id="categories" class="form-select" data-placeholder="Choose category">
                                         @foreach ($categories as $key => $category)
-                                            @forelse (old('categories') ?? [] as $selectedId)
-                                                    <option value="{{ $key }}" {{ $selectedId == $key ? 'selected' : '' }}>{{ $category }}</option>
-                                                @empty
-                                                    @forelse ($book->categories as $cat)
-                                                        <option value="{{ $key }}" {{ $cat->id == $key ? 'selected' : '' }}>{{ $cat->name }}</option>
-                                                    @empty
-                                                        <option value="{{ $key }}">{{ $category }}</option>
-                                                    @endforelse
-                                            @endforelse
+                                            <option value="{{ $key }}" {{ $book->categories->pluck('id')->contains($key) ? 'selected' : '' }}>{{ $category }}</option>
                                         @endforeach
                                     </select>
                                 </div>
