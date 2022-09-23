@@ -26,8 +26,13 @@ class CategoryService implements CategoryInterface {
 
     }
 
-    public function delete($id)
+    public function delete($category)
     {
+        try {
+            $category->delete();
 
+        } catch (\Exception $th) {
+            throw new CategoryStoreException($th->getMessage());
+        }
     }
 }

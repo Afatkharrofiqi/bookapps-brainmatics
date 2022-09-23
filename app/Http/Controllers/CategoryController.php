@@ -119,7 +119,7 @@ class CategoryController extends Controller
         abort_if(!Gate::allows('delete-category'), 403, 'Anda tidak memiliki hak akses!');
 
         try {
-            $category->delete();
+            $this->categoryInterface->delete($category);
             return redirect()
                     ->route('category.index')
                     ->with('message-success', 'Category deleted successfully');
