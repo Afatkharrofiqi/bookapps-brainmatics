@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Gate;
 class CategoryController extends Controller
 {
 
-    public function __construct(private CategoryInterface $categoryInterface){}
+    public function __construct(private CategoryInterface $categoryInterface)
+    {
+    }
     /**
      * Display a listing of the resource.
      *
@@ -56,7 +58,7 @@ class CategoryController extends Controller
         } catch (\App\Exceptions\CategoryStoreException $e) {
             return redirect()
                 ->route('category.index')
-                ->with('message-fail', 'Category create fail. '.$e->getMessage() );
+                ->with('message-fail', 'Category create fail. ' . $e->getMessage());
         }
     }
 
@@ -96,15 +98,14 @@ class CategoryController extends Controller
     public function update(CategoryUpdateRequest $request, Category $category)
     {
         try {
-            $category->name = $request->name;
-            $category->save();
+            $this->categoryInterface->update($request->all(), $category);
             return redirect()
                 ->route('category.index')
                 ->with('message-success', 'Category updated successfully');
         } catch (\Exception $e) {
             return redirect()
                 ->route('category.index')
-                ->with('message-fail', 'Category update failure. '.$e->getMessage());
+                ->with('message-fail', 'Category update failure. ' . $e->getMessage());
         }
     }
 
@@ -121,16 +122,17 @@ class CategoryController extends Controller
         try {
             $this->categoryInterface->delete($category);
             return redirect()
-                    ->route('category.index')
-                    ->with('message-success', 'Category deleted successfully');
+                ->route('category.index')
+                ->with('message-success', 'Category deleted successfully');
         } catch (\Exception $e) {
             return redirect()
                 ->route('category.index')
-                ->with('message-fail', 'Category update failure. '.$e->getMessage());
+                ->with('message-fail', 'Category update failure. ' . $e->getMessage());
         }
     }
 
-    public function getSelect2(){
+    public function getSelect2()
+    {
         return Category::all();
     }
 }

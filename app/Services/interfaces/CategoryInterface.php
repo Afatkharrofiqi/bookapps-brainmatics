@@ -2,8 +2,11 @@
 
 namespace App\Services\Interfaces;
 
-interface CategoryInterface {
+use App\Models\Category;
+
+interface CategoryInterface
+{
     public function store(array $data);
-    public function update($id);
+    public function update(array $data, Category $category);
     public function delete($category);
 }
