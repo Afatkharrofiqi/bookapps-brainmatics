@@ -10,4 +10,12 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    public function response($status, $data){
+        return [
+            'message' => 'Data retrive successfully',
+            'status'  => $status,
+            'data'    => $data,
+        ];
+    }
 }
